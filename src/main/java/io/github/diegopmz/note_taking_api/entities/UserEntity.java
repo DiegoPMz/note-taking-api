@@ -1,26 +1,38 @@
 package io.github.diegopmz.note_taking_api.entities;
 
-
-import jakarta.persistence.*;
-import lombok.*;
-
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-@Data @AllArgsConstructor @NoArgsConstructor @Builder
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "users")
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private UUID id;
+    private int id;
 
-    @Column(name = "email" )
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "password" )
+    @Column(name = "password")
     private String password;
 
     @Column(name = "font")
@@ -29,10 +41,14 @@ public class UserEntity {
     @Column(name = "theme")
     private String themeSelected;
 
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            mappedBy = "userDetails"
-    )
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<NoteEntity> notes;
+
+    public void addNote(NoteEntity note) {
+        if (this.notes == null) {
+            this.notes = new ArrayList<>();
+        }
+        this.notes.add(note);
+    }
+
 }
