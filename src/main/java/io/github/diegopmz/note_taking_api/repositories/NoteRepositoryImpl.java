@@ -2,7 +2,6 @@ package io.github.diegopmz.note_taking_api.repositories;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import io.github.diegopmz.note_taking_api.entities.NoteEntity;
@@ -15,7 +14,6 @@ public class NoteRepositoryImpl implements NoteRepository {
 
     private EntityManager entityManager;
 
-    @Autowired
     public NoteRepositoryImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
@@ -36,9 +34,9 @@ public class NoteRepositoryImpl implements NoteRepository {
     public List<NoteEntity> getArchivedNotesByUser(int userId) {
         TypedQuery<NoteEntity> query = this.entityManager.createQuery(
                 "SELECT n FROM NoteEntity n "
-                        + "WHERE n.id = :paramId AND n.archived = true ",
+                        + "WHERE n.user.id = :paramUserId AND n.archived = true ",
                 NoteEntity.class);
-        query.setParameter("paramId", userId);
+        query.setParameter("paramUserId", userId);
         return query.getResultList();
     }
 
@@ -60,6 +58,16 @@ public class NoteRepositoryImpl implements NoteRepository {
         query.setParameter("paramId", userId);
         query.setParameter("paramQuery", queryText);
 
+        return query.getResultList();
+    }
+
+    @Override
+    public List<NoteEntity> getUnarchivedNotesByUser(int userId) {
+        TypedQuery<NoteEntity> query = this.entityManager.createQuery(
+                "SELECT n FROM NoteEntity n "
+                        + "WHERE n.user.id = :paramUserId",
+                NoteEntity.class);
+        query.setParameter("paramUserId", userId);
         return query.getResultList();
     }
 

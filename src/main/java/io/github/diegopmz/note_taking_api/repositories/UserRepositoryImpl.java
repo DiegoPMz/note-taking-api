@@ -1,6 +1,5 @@
 package io.github.diegopmz.note_taking_api.repositories;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import io.github.diegopmz.note_taking_api.entities.UserEntity;
@@ -13,7 +12,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     private EntityManager entityManager;
 
-    @Autowired
     public UserRepositoryImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
