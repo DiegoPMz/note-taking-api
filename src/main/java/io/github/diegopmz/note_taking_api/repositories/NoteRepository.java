@@ -12,6 +12,8 @@ public interface NoteRepository {
 
     NoteEntity findById(int noteId);
 
+    List<NoteEntity> getUnarchivedNotesByUser(int userId);
+
     List<NoteEntity> getArchivedNotesByUser(int userId);
 
     List<NoteEntity> searchNotesByText(String queryText, int userId);

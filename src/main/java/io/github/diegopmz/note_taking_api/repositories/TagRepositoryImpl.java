@@ -2,7 +2,6 @@ package io.github.diegopmz.note_taking_api.repositories;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import io.github.diegopmz.note_taking_api.entities.TagEntity;
@@ -14,7 +13,6 @@ public class TagRepositoryImpl implements TagRepository {
 
     private EntityManager entityManager;
 
-    @Autowired
     public TagRepositoryImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
@@ -39,6 +37,16 @@ public class TagRepositoryImpl implements TagRepository {
 
         query.setParameter("paramUserId", userId);
         return query.getResultList();
+    }
+
+    @Override
+    public TagEntity save(TagEntity tag) {
+        if (tag.getId() == null) {
+            this.entityManager.persist(tag);
+            return tag;
+        }
+
+        return this.entityManager.merge(tag);
     }
 
 }
